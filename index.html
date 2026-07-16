@@ -23,6 +23,10 @@
     <link rel="stylesheet" href="css/components.css">
     <link rel="stylesheet" href="css/home.css">
 
+	<link 
+href="https://unpkg.com/aos@2.3.1/dist/aos.css"
+rel="stylesheet">
+
     <!-- Icônes -->
     <link rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
@@ -97,7 +101,9 @@
     <div class="container hero-container">
 
 
-        <div class="hero-content">
+        <div 
+		class="hero-content"
+		data-aos="fade-up">
 
 
             <p class="hero-intro">
@@ -173,7 +179,9 @@
     <div class="container about-container">
 
 
-        <div class="about-content">
+        <div 
+		class="about-content"
+		data-aos="fade-right">
 
 
             <p class="section-label">
@@ -211,7 +219,9 @@
 
 
 
-        <div class="about-card">
+        <div 
+		class="about-card"
+		data-aos="fade-left">
 
 
             <div class="info-item">
@@ -303,7 +313,10 @@ Mon expérience
 
 
 
-<div class="timeline-item">
+<div 
+class="timeline-item"
+data-aos="fade-up"
+>
 
 
 <div class="timeline-date">
@@ -341,7 +354,9 @@ informatique et systèmes embarqués.
 
 
 
-<div class="timeline-item">
+<div 
+class="timeline-item"
+data-aos="fade-up">
 
 
 <div class="timeline-date">
@@ -379,7 +394,9 @@ missions réalisées et compétences développées.
 
 
 
-<div class="timeline-item">
+<div 
+class="timeline-item"
+data-aos="fade-up">
 
 
 <div class="timeline-date">
@@ -451,7 +468,9 @@ informatique et technologies numériques.
 
             <!-- Electronique -->
 
-            <div class="skill-card">
+            <div 
+			class="skill-card"
+			data-aos="fade-up">
 
 
                 <div class="skill-icon">
@@ -487,7 +506,9 @@ informatique et technologies numériques.
 
             <!-- Programmation -->
 
-            <div class="skill-card">
+            <div 
+			class="skill-card"
+			data-aos="fade-up">
 
 
                 <div class="skill-icon">
@@ -522,7 +543,9 @@ informatique et technologies numériques.
 
             <!-- Embarqué -->
 
-            <div class="skill-card">
+            <div 
+			class="skill-card"
+			data-aos="fade-up">
 
 
                 <div class="skill-icon">
@@ -557,7 +580,9 @@ informatique et technologies numériques.
 
             <!-- Outils -->
 
-            <div class="skill-card">
+            <div 
+			class="skill-card"
+			data-aos="fade-up">
 
 
                 <div class="skill-icon">
@@ -629,7 +654,10 @@ informatique et technologies numériques.
 
             <!-- Projet 1 -->
 
-            <article class="project-card">
+            <article 
+			class="project-card"
+			data-aos="fade-up"
+			data-aos-delay="100">
 
 
                 <div class="project-image">
@@ -710,7 +738,10 @@ informatique et technologies numériques.
 
             <!-- Projet 2 -->
 
-            <article class="project-card">
+            <article 
+			class="project-card"
+			data-aos="fade-up"
+			data-aos-delay="200">
 
 
                 <div class="project-image">
@@ -772,7 +803,10 @@ informatique et technologies numériques.
 
             </article>
 
-			<article class="project-card">
+			<article 
+			class="project-card"
+			data-aos="fade-up"
+			data-aos-delay="300">
 
 
 				<div class="project-image">
@@ -1000,6 +1034,24 @@ informatique et technologies numériques.
 
     <script src="js/main.js"></script>
 
+
+
+<script 
+src="https://unpkg.com/aos@2.3.1/dist/aos.js">
+</script>
+
+
+<script>
+
+AOS.init({
+
+    duration:800,
+
+    once:true
+
+});
+
+</script>
 </body>
 
 </html>
