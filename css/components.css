@@ -1,0 +1,83 @@
+/* ========================= */
+/* Navbar */
+/* ========================= */
+
+
+.navbar {
+
+    position: fixed;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+
+    z-index: 1000;
+
+    background: rgba(248,250,252,0.75);
+
+    backdrop-filter: blur(12px);
+
+    border-bottom: 1px solid var(--border);
+
+}
+
+
+.nav-container {
+
+    height: 80px;
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+}
+
+
+/* Logo */
+
+.logo {
+
+    font-size: 1.2rem;
+
+    font-weight: 700;
+
+    color: var(--text);
+
+}
+
+
+/* Navigation */
+
+.nav-links {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 2rem;
+
+}
+
+
+.nav-links a {
+
+    color: var(--text-light);
+
+    font-size: 0.95rem;
+
+    font-weight: 500;
+
+    transition: color .3s ease;
+
+}
+
+
+
+.nav-links a:hover {
+
+    color: var(--primary);
+
+}
