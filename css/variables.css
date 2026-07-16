@@ -1,0 +1,45 @@
+:root {
+
+    /* Couleurs */
+
+    --background: #F8FAFC;
+    --surface: #FFFFFF;
+
+    --primary: #4F46E5;
+    --primary-light: #6366F1;
+
+    --secondary: #7C3AED;
+
+    --text: #1E293B;
+    --text-light: #64748B;
+
+    --border: #E2E8F0;
+
+    /* Ombres */
+
+    --shadow-sm:
+        0 2px 8px rgba(15,23,42,.05);
+
+    --shadow-md:
+        0 8px 25px rgba(15,23,42,.08);
+
+    --shadow-lg:
+        0 15px 40px rgba(15,23,42,.12);
+
+    /* Espacements */
+
+    --spacing-xs: .5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 2rem;
+    --spacing-lg: 4rem;
+    --spacing-xl: 6rem;
+
+    /* Rayons */
+
+    --radius: 14px;
+
+    /* Largeur maximale */
+
+    --container: 1200px;
+
+}

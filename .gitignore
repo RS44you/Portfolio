@@ -1,0 +1,16 @@
+# Système
+.DS_Store
+Thumbs.db
+
+# VS Code
+.vscode/
+
+# Fichiers temporaires
+*.log
+
+# Node (si on passe à Astro plus tard)
+node_modules/
+dist/
+
+# Fichiers personnels
+assets/cv/*.pdf
