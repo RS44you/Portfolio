@@ -53,3 +53,22 @@ body {
     padding-top: 80px;
 
 }
+
+/* ========================= */
+/* Footer */
+/* ========================= */
+
+
+.footer {
+
+    padding:2rem 0;
+
+    border-top:1px solid var(--border);
+
+    text-align:center;
+
+    color:var(--text-light);
+
+    font-size:.9rem;
+
+}
