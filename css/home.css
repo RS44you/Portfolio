@@ -252,3 +252,113 @@
     }
 
 }
+
+/* ========================= */
+/* About */
+/* ========================= */
+
+
+.about-container {
+
+    display:grid;
+
+    grid-template-columns:1fr 400px;
+
+    gap:4rem;
+
+    align-items:center;
+
+}
+
+
+
+.section-label {
+
+    color:var(--primary);
+
+    font-weight:600;
+
+    margin-bottom:1rem;
+
+}
+
+
+
+.about-content h2 {
+
+    font-size:2.3rem;
+
+    line-height:1.2;
+
+    margin-bottom:1.5rem;
+
+}
+
+
+
+.about-content p {
+
+    color:var(--text-light);
+
+    margin-bottom:1rem;
+
+}
+
+
+
+/* Carte */
+
+.about-card {
+
+
+    background:var(--surface);
+
+    border:1px solid var(--border);
+
+    border-radius:var(--radius);
+
+    padding:2rem;
+
+    box-shadow:var(--shadow-sm);
+
+}
+
+
+
+.info-item {
+
+    padding:1.2rem 0;
+
+    border-bottom:1px solid var(--border);
+
+}
+
+
+
+.info-item:last-child {
+
+    border-bottom:none;
+
+}
+
+
+
+.info-item h3 {
+
+    font-size:1rem;
+
+    margin-bottom:.5rem;
+
+    color:var(--text);
+
+}
+
+
+
+.info-item p {
+
+    color:var(--text-light);
+
+    font-size:.95rem;
+
+}
