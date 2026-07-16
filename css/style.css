@@ -72,3 +72,25 @@ body {
     font-size:.9rem;
 
 }
+
+@media(max-width:600px){
+
+
+    section {
+
+        padding:4rem 0;
+
+    }
+
+
+
+    .container {
+
+
+        width:90%;
+
+
+    }
+
+
+}

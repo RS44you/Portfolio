@@ -788,3 +788,45 @@
 
 
 }
+
+@media(max-width:900px){
+
+
+    .hero-container {
+
+
+        flex-direction:column;
+
+
+        text-align:center;
+
+
+    }
+
+
+
+    .hero-buttons {
+
+
+        justify-content:center;
+
+
+        flex-wrap:wrap;
+
+
+    }
+
+
+
+    .hero-decoration {
+
+
+        width:250px;
+
+        height:250px;
+
+
+    }
+
+
+}

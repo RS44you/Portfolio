@@ -91,3 +91,90 @@
     justify-content:center;
 
 }
+
+/* ========================= */
+/* Menu mobile */
+/* ========================= */
+
+
+.menu-toggle {
+
+    display:none;
+
+    background:none;
+
+    border:none;
+
+    font-size:1.5rem;
+
+    cursor:pointer;
+
+    color:var(--text);
+
+}
+
+
+
+
+
+@media(max-width:800px){
+
+
+    .nav-links {
+
+
+        position:absolute;
+
+        top:80px;
+
+        left:0;
+
+        width:100%;
+
+
+        background:white;
+
+
+        flex-direction:column;
+
+
+        padding:2rem;
+
+
+        gap:1.5rem;
+
+
+        border-bottom:1px solid var(--border);
+
+
+        transform:translateY(-150%);
+
+
+        transition:.3s ease;
+
+
+    }
+
+
+
+    .nav-links.active {
+
+
+        transform:translateY(0);
+
+
+    }
+
+
+
+    .menu-toggle {
+
+
+        display:block;
+
+
+    }
+
+
+
+}
