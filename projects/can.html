@@ -48,6 +48,23 @@ MathJax = {
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
 
+<!-- Style complémentaire pour la liste de sources, au cas où elle
+     ne serait pas encore définie dans project.css -->
+<style>
+.project-content ol.sources-list {
+    padding-left: 1.4rem;
+    font-size: 0.92rem;
+    color: var(--color-text-secondary, #555);
+    line-height: 1.7;
+}
+.project-content ol.sources-list li {
+    margin-bottom: 0.5rem;
+}
+.project-content ol.sources-list a {
+    word-break: break-word;
+}
+</style>
+
 
 </head>
 
@@ -63,15 +80,6 @@ MathJax = {
 
 
 <div class="container nav-container">
-
-
-<a href="../index.html" class="logo">
-
-Youenn Le Roux
-
-</a>
-
-
 
 <a href="../index.html" class="back-link">
 
@@ -141,21 +149,21 @@ d'un CAN à rampe simple piloté par Arduino.
 
 <span>
 
-Électronique analogique
+Électronique analogique,
 
 </span>
 
 
 <span>
 
-Instrumentation
+Instrumentation,
 
 </span>
 
 
 <span>
 
-Arduino
+Arduino,
 
 </span>
 
@@ -188,7 +196,7 @@ Amplificateurs opérationnels
 <div class="container">
 
 
-<img src="../assets/images/projects/can/hero-manip.jpg"
+<img src="../assets/images/projects/can/CAN_image.jpg"
 alt="Montage expérimental de mesure d'un signal analogique"
 class="project-main-image">
 
@@ -436,6 +444,20 @@ $$q = -\dfrac{U_p}{RC}\,\Delta t$$
 </div>
 
 
+<p>
+
+Reste à fixer la fréquence d'échantillonnage $f_e$. J'ai choisi
+arbitrairement de découper chaque période d'échantillonnage $T_e$ en
+deux moitiés égales : pendant la première, le condensateur de
+l'intégrateur est déchargé (remise à zéro de la rampe) ; pendant la
+seconde, la rampe croît et peut détecter le dépassement de $U(t)$. En
+me limitant par ailleurs à des tensions à mesurer comprises entre 0 V
+et 5 V (tension pleine échelle $V_{pe} = 5\,\mathrm{V}$), ce choix fixe
+entièrement $f_e$ une fois les composants choisis.
+
+</p>
+
+
 <div class="note-block">
 
 <h3>
@@ -516,6 +538,96 @@ Cycles de charge/décharge mesurés sur la tension de référence U_REF(t)
 
 <h2>
 
+Performances
+
+</h2>
+
+
+<p>
+
+Peut-on faire mieux avec ce montage ? En conservant les mêmes
+contraintes — tension pleine échelle $V_{pe}$ fixe et résolution
+temporelle de l'Arduino $\Delta t = 10\,\mu s$ — on peut exprimer le
+quantum en fonction de la fréquence d'échantillonnage. La rampe ne
+disposant que de la moitié de la période d'échantillonnage $T_e$ pour
+croître de 0 à $V_{pe}$ :
+
+</p>
+
+
+<div class="math-block">
+
+$$q = \dfrac{V_{pe}\,\Delta t}{\tfrac{1}{2}T_e} = 2\,V_{pe}\,\Delta t\, f_e$$
+
+</div>
+
+
+<p>
+
+Or le quantum d'un convertisseur à $N$ bits vaut par définition
+$q = V_{pe}/2^N$. En combinant les deux relations, on en déduit le
+nombre de bits effectifs $N$ :
+
+</p>
+
+
+<div class="math-block">
+
+$$N = \dfrac{\ln(V_{pe}) - \ln\left(2\,V_{pe}\,\Delta t\, f_e\right)}{\ln(2)}
+\;=\; -\log_2(2\Delta t) - \log_2(10)\times\log_{10}(f_e)$$
+
+</div>
+
+
+<p>
+
+Résultat notable : ce lien entre $N$ et $f_e$ ne dépend que de
+$\Delta t$ — la résolution temporelle de la carte Arduino — et pas des
+valeurs de $R$, $C$ ou $U_p$ choisies pour le montage. C'est donc bien
+la carte Arduino qui limite fondamentalement les performances du
+prototype, quels que soient les composants analogiques utilisés
+autour d'elle.
+
+</p>
+
+
+<p>
+
+En m'appuyant sur un article de synthèse de Claude Prévot publié dans
+<em>Techniques de l'Ingénieur</em>, j'ai pu comparer cette relation
+$N(f_e)$ à celle des CAN commerciaux existants.
+
+</p>
+
+
+<div class="project-figure">
+
+<img src="../assets/images/projects/can/graph-marche.png"
+alt="Positionnement du prototype sur le domaine résolution/fréquence des CAN du marché">
+
+<figcaption>
+
+Résolution et fréquence d'échantillonnage des CAN du marché, et positionnement du prototype
+
+</figcaption>
+
+</div>
+
+
+<p>
+
+On observe que les performances de mon CAN sont très en retrait par
+rapport à celles des CAN du marché — ce qui s'explique en grande
+partie par la limite intrinsèque de la carte Arduino, mais aussi par
+les différences de technologies employées : les CAN commerciaux
+reposent sur des architectures bien plus sophistiquées qu'un simple
+montage à rampe analogique piloté par microcontrôleur généraliste.
+
+</p>
+
+
+<h2>
+
 Résultats
 
 </h2>
@@ -586,26 +698,12 @@ professionnelle et un prototype fait maison :
 
 <p>
 
-Replacé sur la carte résolution/fréquence des CAN du marché, mon
-prototype se situe dans un ordre de grandeur cohérent avec des
-composants dédiés bas de gamme — un résultat satisfaisant pour un
-montage entièrement discret piloté par microcontrôleur.
+Le prototype se situe donc, sans surprise, très en retrait de la carte
+d'acquisition professionnelle, mais reste dans un ordre de grandeur
+raisonnable par rapport au boîtier pédagogique — un résultat cohérent
+pour un montage entièrement discret, conçu et câblé à la main.
 
 </p>
-
-
-<div class="project-figure">
-
-<img src="../assets/images/projects/can/graph-marche.png"
-alt="Positionnement du prototype sur le domaine résolution/fréquence des CAN du marché">
-
-<figcaption>
-
-Résolution et fréquence d'échantillonnage des CAN du marché, et positionnement du prototype
-
-</figcaption>
-
-</div>
 
 
 <h2>
@@ -620,21 +718,21 @@ Compétences acquises
 
 <span>
 
-Électronique analogique
+Électronique analogique,
 
 </span>
 
 
 <span>
 
-Amplificateurs opérationnels
+Amplificateurs opérationnels,
 
 </span>
 
 
 <span>
 
-Programmation Arduino
+Programmation Arduino,
 
 </span>
 
@@ -646,14 +744,66 @@ Instrumentation & mesure
 </span>
 
 
-<span>
 
-Analyse d'incertitudes
-
-</span>
 
 
 </div>
+
+
+<h2>
+
+Sources
+
+</h2>
+
+
+<ol class="sources-list">
+
+<li>
+
+SPIE — <em>A better CMOS image sensor for ultra-high-definition TV</em> —
+<a href="https://www.spie.org/news/5420-a-better-cmos-image-sensor-for-ultra-high-definition-tv" target="_blank" rel="noopener">spie.org</a>
+
+</li>
+
+<li>
+
+Jean-Max Dutertre — <em>Conversions analogique-numérique et
+numérique-analogique</em>, cours ENSMSE —
+<a href="https://www.emse.fr/~dutertre/documents/cours_convertisseurs.pdf" target="_blank" rel="noopener">emse.fr</a>
+
+</li>
+
+<li>
+
+Claude Prévot — <em>Conversions analogique-numérique et
+numérique-analogique (partie 1)</em>, Techniques de l'ingénieur, e370
+
+</li>
+
+<li>
+
+Claude Prévot — <em>Conversions analogique-numérique et
+numérique-analogique (partie 3)</em>, Techniques de l'ingénieur, e372
+
+</li>
+
+<li>
+
+Cédric Pastorelli — <em>Conception d'un convertisseur
+analogique-numérique à rampe par morceaux pour capteur d'image avec
+techniques de calibration</em> — el-01514474
+
+</li>
+
+<li>
+
+René Pierre Bégu — <em>Conversions numérique-analogique et
+analogique-numérique</em>, Techniques de l'ingénieur, e3710
+
+</li>
+
+</ol>
 
 
 </div>
