@@ -85,3 +85,318 @@
     color:var(--text-light);
 
 }
+
+
+/* ========================= */
+/* Identité Robot */
+/* ========================= */
+
+.project-robot .project-hero {
+
+    background: linear-gradient(
+        135deg,
+        var(--robot-light),
+        white
+    );
+
+}
+
+.project-robot .section-label {
+
+    color: var(--robot-color);
+
+}
+
+.project-robot .tags span {
+
+    background: var(--robot-light);
+
+    color: var(--robot-color);
+
+}
+
+.project-robot h1 {
+
+    color: var(--robot-color);
+
+}
+
+
+.project-category {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 1rem;
+
+    margin-bottom: 1rem;
+
+}
+
+.project-icon {
+
+    width: 60px;
+    height: 60px;
+
+    border-radius: 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: var(--robot-light);
+
+    font-size: 2rem;
+
+}
+
+.project-category {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 1rem;
+
+    margin-bottom: 1rem;
+
+}
+
+.project-icon {
+
+    width: 60px;
+    height: 60px;
+
+    border-radius: 50%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background: var(--robot-light);
+
+    font-size: 2rem;
+
+}
+/* ========================= */
+/* Conversion CAN */
+/* ========================= */
+
+.project-can .project-hero {
+    background: linear-gradient(135deg, var(--can-light), white);
+}
+
+.project-can .section-label {
+    color: var(--can-color);
+}
+
+.project-can .tags span {
+    background: var(--can-light);
+    color: var(--can-color);
+}
+
+.project-can h1 {
+    color: var(--can-color);
+}
+
+.project-can .project-icon {
+    background: var(--can-light);
+}
+
+/* ========================= */
+/* Figures & légendes */
+/* ========================= */
+
+.project-figure {
+    margin: 2rem 0;
+}
+
+.project-figure img {
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+}
+
+.project-figure figcaption {
+    margin-top: .8rem;
+    text-align: center;
+    color: var(--text-light);
+    font-size: .9rem;
+}
+
+.figure-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: start;
+}
+
+@media(max-width:700px){
+    .figure-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ========================= */
+/* Blocs formules */
+/* ========================= */
+
+.math-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--primary);
+    border-radius: var(--radius);
+    padding: 1.5rem 2rem;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+}
+
+.note-block {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.5rem 2rem;
+    margin: 1.5rem 0;
+}
+
+.note-block h3 {
+    font-size: 1rem;
+    margin-bottom: .6rem;
+    color: var(--primary);
+}
+
+/* ========================= */
+/* Tableau comparatif */
+/* ========================= */
+
+.project-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    background: var(--surface);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+}
+
+.project-table th,
+.project-table td {
+    padding: .9rem 1.2rem;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+.project-table th {
+    background: var(--background);
+    color: var(--text);
+    font-weight: 600;
+    font-size: .9rem;
+}
+
+.project-table td {
+    color: var(--text-light);
+}
+
+.project-table tr:last-child td {
+    border-bottom: none;
+}
+
+/* ========================= */
+/* Bouton retour projet */
+/* ========================= */
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    color: var(--text-light);
+    font-weight: 500;
+    font-size: .95rem;
+}
+
+.back-link:hover {
+    color: var(--primary);
+}
+
+/* ========================= */
+/* Réseau de neurones (MNIST) */
+/* ========================= */
+
+.project-ml .project-hero {
+    background: linear-gradient(135deg, var(--ml-light), white);
+}
+
+.project-ml .section-label {
+    color: var(--ml-color);
+}
+
+.project-ml .tags span {
+    background: var(--ml-light);
+    color: var(--ml-color);
+}
+
+.project-ml h1 {
+    color: var(--ml-color);
+}
+
+.project-ml .project-icon {
+    background: var(--ml-light);
+}
+
+/* ========================= */
+/* Bloc code */
+/* ========================= */
+
+.code-block {
+    background: #0F172A;
+    color: #E2E8F0;
+    border-radius: var(--radius);
+    padding: 1.5rem 1.8rem;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+    font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+    font-size: .88rem;
+    line-height: 1.6;
+    white-space: pre;
+}
+
+.code-block .comment { color: #64748B; }
+.code-block .keyword { color: #C4B5FD; }
+.code-block .func { color: #7DD3FC; }
+
+/* ========================= */
+/* Bandeau d'avertissement / info */
+/* ========================= */
+
+.info-banner {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    background: #FFFBEB;
+    border: 1px solid #FDE68A;
+    border-radius: var(--radius);
+    padding: 1.2rem 1.5rem;
+    margin: 1.5rem 0;
+    font-size: .92rem;
+    color: #92400E;
+}
+
+.info-banner i {
+    font-size: 1.1rem;
+    margin-top: .15rem;
+}
+
+/* ========================= */
+/* Liens projet (GitHub, etc.) */
+/* ========================= */
+
+.project-links {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.project-links .btn i {
+    margin-right: .5rem;
+}

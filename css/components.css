@@ -178,3 +178,122 @@
 
 
 }
+/* ========================= */
+/* CV dropdown */
+/* ========================= */
+
+.cv-dropdown {
+
+    position: relative;
+
+    display: inline-flex;
+
+}
+
+.cv-dropdown-toggle {
+
+    cursor: pointer;
+
+    border: 1px solid var(--border);
+
+    font-family: inherit;
+
+    font-size: 1rem;
+
+    gap: .6rem;
+
+}
+
+.cv-dropdown-toggle i {
+
+    font-size: .75rem;
+
+    color: var(--text-light);
+
+    transition: transform .3s ease;
+
+}
+
+.cv-dropdown.active .cv-dropdown-toggle i {
+
+    transform: rotate(180deg);
+
+}
+
+.cv-dropdown-menu {
+
+    position: absolute;
+
+    top: calc(100% + .6rem);
+
+    left: 0;
+
+    min-width: 190px;
+
+    background: white;
+
+    border: 1px solid var(--border);
+
+    border-radius: var(--radius);
+
+    box-shadow: var(--shadow-md);
+
+    padding: .5rem;
+
+    opacity: 0;
+
+    visibility: hidden;
+
+    transform: translateY(-8px);
+
+    transition: .25s ease;
+
+    z-index: 10;
+
+}
+
+.cv-dropdown.active .cv-dropdown-menu {
+
+    opacity: 1;
+
+    visibility: visible;
+
+    transform: translateY(0);
+
+}
+
+.cv-dropdown-menu a {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: .7rem;
+
+    padding: .7rem .9rem;
+
+    border-radius: 10px;
+
+    color: var(--text);
+
+    font-weight: 500;
+
+    font-size: .95rem;
+
+    transition: .2s ease;
+
+}
+
+.cv-dropdown-menu a:hover {
+
+    background: var(--background);
+
+    color: var(--primary);
+
+}
+
+.cv-flag {
+
+    font-size: 1.1rem;
+
+}

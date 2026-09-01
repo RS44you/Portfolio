@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+
+<head>
+
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>Conversion Analogique-Numérique (CAN) | Portfolio</title>
+
+
+<meta name="description"
+content="Étude du fonctionnement des convertisseurs analogique-numérique et conception d'un CAN à rampe simple, par Youenn Le Roux">
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
+
+
+<link rel="stylesheet" href="../css/variables.css">
+
+<link rel="stylesheet" href="../css/style.css">
+
+<link rel="stylesheet" href="../css/project.css">
+
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<!-- MathJax : rendu des formules LaTeX directement dans le HTML -->
+<script>
+MathJax = {
+    tex: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']]
+    },
+    svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+
+
+</head>
+
+
+
+<body class="project-can">
+
+
+<!-- Navigation -->
+
+
+<nav class="navbar">
+
+
+<div class="container nav-container">
+
+
+<a href="../index.html" class="logo">
+
+Youenn Le Roux
+
+</a>
+
+
+
+<a href="../index.html" class="back-link">
+
+<i class="fa-solid fa-arrow-left"></i> Retour
+
+</a>
+
+
+</div>
+
+
+</nav>
+
+
+
+
+
+<main>
+
+
+
+<!-- Hero projet -->
+
+
+<section class="project-hero">
+
+
+<div class="container">
+
+
+<div class="project-category">
+
+<div class="project-icon">
+
+📟
+
+</div>
+
+<p class="section-label">
+
+Projet · TIPE 2025
+
+</p>
+
+</div>
+
+
+<h1>
+
+Conversion Analogique-Numérique
+
+</h1>
+
+
+<p class="project-intro">
+
+Étude du fonctionnement des convertisseurs analogique-numérique (CAN),
+comparaison de trois dispositifs réels, puis conception et test
+d'un CAN à rampe simple piloté par Arduino.
+
+</p>
+
+
+
+<div class="tags">
+
+
+<span>
+
+Électronique analogique
+
+</span>
+
+
+<span>
+
+Instrumentation
+
+</span>
+
+
+<span>
+
+Arduino
+
+</span>
+
+
+<span>
+
+Amplificateurs opérationnels
+
+</span>
+
+
+</div>
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+<!-- Image -->
+
+
+<section>
+
+
+<div class="container">
+
+
+<img src="../assets/images/projects/can/hero-manip.jpg"
+alt="Montage expérimental de mesure d'un signal analogique"
+class="project-main-image">
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+<!-- Contenu -->
+
+
+<section>
+
+
+<div class="container project-content">
+
+
+<h2>
+Contexte
+</h2>
+
+
+<p>
+
+Un signal est l'évolution d'une grandeur physique au cours du temps.
+Beaucoup de grandeurs que l'on souhaite mesurer ou traiter — une tension,
+une position, une température — sont analogiques : elles varient de façon
+continue. Or les systèmes numériques (microcontrôleurs, ordinateurs) ne
+manipulent que des nombres binaires. Il faut donc un intermédiaire capable
+de transformer un signal analogique en une suite de valeurs numériques :
+le convertisseur analogique-numérique, ou CAN.
+
+</p>
+
+
+<p>
+
+Ce TIPE part d'une question simple : comment mesurer une tension $U(t)$
+inconnue et variable dans le temps, et la traduire fidèlement en une
+grandeur numérique exploitable ?
+
+</p>
+
+
+<div class="project-figure">
+
+<img src="../assets/images/projects/can/schema-rc.png"
+alt="Circuit RC dont on cherche à mesurer la tension aux bornes de R">
+
+<figcaption>
+
+Problématique de départ : comment mesurer U(t) aux bornes de R ?
+
+</figcaption>
+
+</div>
+
+
+<h2>
+
+Objectifs
+
+</h2>
+
+
+<p>
+
+L'objectif est triple : comprendre le principe de fonctionnement d'un CAN
+à rampe (comparaison d'un signal inconnu à une tension de référence
+croissante), caractériser deux CAN existants pour en extraire les deux
+paramètres clés — le <strong>quantum</strong> $q$ (plus petite variation
+de tension détectable) et la <strong>fréquence d'échantillonnage</strong>
+$f_e$ — puis concevoir, câbler et tester mon propre CAN à rampe simple
+autour d'un montage à amplificateurs opérationnels et d'une carte Arduino.
+
+</p>
+
+
+<h2>
+
+Conception
+
+</h2>
+
+
+<p>
+
+Le principe d'un CAN à rampe est le suivant : un compteur incrémente une
+tension de référence $U_{REF}(t)$ en escalier (générée par un CNA), qui
+est comparée en continu à la tension à mesurer $U(t)$. Dès que
+$U_{REF}(t)$ dépasse $U(t)$, le comptage s'arrête : la valeur du compteur
+donne alors la conversion numérique du signal.
+
+</p>
+
+
+<div class="project-figure">
+
+<img src="../assets/images/projects/can/schema-can-nbits.png"
+alt="Schéma de principe d'un CAN à N bits">
+
+<figcaption>
+
+Principe général d'un CAN à N bits
+
+</figcaption>
+
+</div>
+
+
+<p>
+
+J'ai commencé par caractériser deux CAN existants en laboratoire : un
+boîtier pédagogique 4 bits (Didalab) et l'entrée analogique 12 bits
+de la carte d'acquisition Sysam SP5. Pour chacun, j'ai mesuré le quantum
+$q = V_{pe}/2^N$ (résolution en tension) et la fréquence
+d'échantillonnage $f_e$ à partir de l'acquisition d'une rampe de
+tension connue.
+
+</p>
+
+
+<div class="figure-row">
+
+<div class="project-figure">
+
+<img src="../assets/images/projects/can/photo-boitier-4bits.jpg"
+alt="Boîtier convertisseur analogique-numérique 4 bits">
+
+<figcaption>
+
+Convertisseur analogique-numérique à 4 bits (Didalab)
+
+</figcaption>
+
+</div>
+
+<div class="project-figure">
+
+<img src="../assets/images/projects/can/photo-carte-sysam.jpg"
+alt="Carte d'acquisition Sysam SP5">
+
+<figcaption>
+
+Carte d'acquisition Sysam SP5 (résolution 12 bits)
+
+</figcaption>
+
+</div>
+
+</div>
+
+
+<p>
+
+Sur le boîtier 4 bits, on observe clairement la quantification du signal
+d'entrée : la sortie numérique progresse par paliers, avec un écart
+maximal de 1 LSB (quantum) entre la tension réelle et la tension
+mesurée.
+
+</p>
+
+
+<div class="project-figure">
+
+<img src="../assets/images/projects/can/graph-caracteristique.png"
+alt="Caractéristique du CAN 4 bits, tension d'entrée en fonction de la sortie numérique">
+
+<figcaption>
+
+Caractéristique du CAN 4 bits : la sortie numérique suit U(t) par paliers de largeur q
+
+</figcaption>
+
+</div>
+
+
+<h2>
+
+Conception de mon propre CAN
+
+</h2>
+
+
+<p>
+
+Pour aller plus loin, j'ai conçu un CAN à rampe simple autour d'un
+intégrateur à amplificateur opérationnel (qui génère la rampe de
+tension de référence à partir d'une tension constante $U_p$), d'un
+comparateur (qui détecte le croisement avec $U(t)$), et d'une carte
+Arduino qui pilote la remise à zéro du montage et chronomètre la durée
+de la rampe pour en déduire la valeur numérique.
+
+</p>
+
+
+<div class="project-figure">
+
+<img src="../assets/images/projects/can/schema-solution-arduino.png"
+alt="Schéma du montage final : intégrateur, comparateur et carte Arduino">
+
+<figcaption>
+
+Montage retenu : intégrateur RC + comparateur, piloté par une carte Arduino
+
+</figcaption>
+
+</div>
+
+
+<p>
+
+L'intégrateur impose $U_{REF} = Ri$ avec $i = -C\,\dfrac{dU_{REF}}{dt}$,
+d'où, à courant d'entrée $U_p/R$ constant :
+
+</p>
+
+
+<div class="math-block">
+
+$$U_{REF}(t) = -\dfrac{U_p}{RC}\,t$$
+
+</div>
+
+
+<p>
+
+En mesurant, à l'aide de la carte Arduino, la durée $\Delta t$ entre le
+début de la rampe et l'instant où elle dépasse $U(t)$, on numérise le
+signal. La résolution temporelle de l'Arduino ($\Delta t = 10\,\mu s$)
+fixe directement le quantum du montage :
+
+</p>
+
+
+<div class="math-block">
+
+$$q = -\dfrac{U_p}{RC}\,\Delta t$$
+
+</div>
+
+
+<div class="note-block">
+
+<h3>
+
+Valeurs du montage réalisé
+
+</h3>
+
+<p>
+
+$R = 1{,}01\ \mathrm{k\Omega}$ &nbsp;·&nbsp;
+$C = 1{,}03\ \mathrm{\mu F}$ &nbsp;·&nbsp;
+$U_p = -4{,}70\ \mathrm{V}$
+&nbsp;→&nbsp; $q = 0{,}05\ \mathrm{V}$ &nbsp;·&nbsp; $f_e = 500\ \mathrm{Hz}$
+
+</p>
+
+</div>
+
+
+<h2>
+
+Réalisation
+
+</h2>
+
+
+<p>
+
+Le montage a été câblé et testé sur table de manipulation, avec un
+oscilloscope pour visualiser en temps réel la rampe $U_{REF}(t)$ et un
+générateur basse fréquence pour injecter des signaux tests (rampe,
+sinusoïde).
+
+</p>
+
+
+<div class="project-figure">
+
+<img src="../assets/images/projects/can/photo-montage.jpg"
+alt="Montage complet du CAN à rampe sur table de manipulation">
+
+<figcaption>
+
+Montage complet : intégrateur, comparateur, Arduino, oscilloscope et GBF
+
+</figcaption>
+
+</div>
+
+
+<p>
+
+Deux difficultés pratiques principales ont dû être résolues : comment
+décharger proprement le condensateur de l'intégrateur entre deux mesures
+(ajout d'un interrupteur commandé), et comment synchroniser la remise à
+zéro des cycles de mesure avec la carte Arduino. La solution retenue
+utilise une sortie logique de l'Arduino pour piloter un second
+amplificateur opérationnel en comparateur, qui court-circuite le
+condensateur à chaque nouveau cycle.
+
+</p>
+
+
+<div class="project-figure">
+
+<img src="../assets/images/projects/can/graph-charge-decharge.png"
+alt="Cycles de charge et décharge de la rampe de référence">
+
+<figcaption>
+
+Cycles de charge/décharge mesurés sur la tension de référence U_REF(t)
+
+</figcaption>
+
+</div>
+
+
+<h2>
+
+Résultats
+
+</h2>
+
+
+<p>
+
+Le prototype a ensuite été utilisé pour numériser un signal sinusoïdal
+de test à 20 Hz. Les points mesurés (avec leurs incertitudes) suivent
+fidèlement la sinusoïde théorique, validant le principe de conversion.
+
+</p>
+
+
+<div class="project-figure">
+
+<img src="../assets/images/projects/can/graph-echantillonnage.png"
+alt="Échantillonnage d'un signal sinusoïdal par le prototype, avec incertitudes">
+
+<figcaption>
+
+Échantillonnage d'un signal sinusoïdal de 20 Hz par le prototype (avec incertitudes)
+
+</figcaption>
+
+</div>
+
+
+<p>
+
+La comparaison des trois dispositifs met en évidence l'écart de
+performance entre un CAN pédagogique simple, une carte d'acquisition
+professionnelle et un prototype fait maison :
+
+</p>
+
+
+<table class="project-table">
+
+<thead>
+<tr>
+<th>Dispositif</th>
+<th>Quantum q</th>
+<th>Fréquence d'échantillonnage f<sub>e</sub></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>Boîtier Didalab (4 bits)</td>
+<td>0,85 V</td>
+<td>18 Hz</td>
+</tr>
+<tr>
+<td>Carte Sysam SP5 (12 bits)</td>
+<td>0,005 V</td>
+<td>10 MHz</td>
+</tr>
+<tr>
+<td>Mon prototype (rampe + Arduino)</td>
+<td>0,05 V</td>
+<td>500 Hz</td>
+</tr>
+</tbody>
+
+</table>
+
+
+<p>
+
+Replacé sur la carte résolution/fréquence des CAN du marché, mon
+prototype se situe dans un ordre de grandeur cohérent avec des
+composants dédiés bas de gamme — un résultat satisfaisant pour un
+montage entièrement discret piloté par microcontrôleur.
+
+</p>
+
+
+<div class="project-figure">
+
+<img src="../assets/images/projects/can/graph-marche.png"
+alt="Positionnement du prototype sur le domaine résolution/fréquence des CAN du marché">
+
+<figcaption>
+
+Résolution et fréquence d'échantillonnage des CAN du marché, et positionnement du prototype
+
+</figcaption>
+
+</div>
+
+
+<h2>
+
+Compétences acquises
+
+</h2>
+
+
+<div class="tags">
+
+
+<span>
+
+Électronique analogique
+
+</span>
+
+
+<span>
+
+Amplificateurs opérationnels
+
+</span>
+
+
+<span>
+
+Programmation Arduino
+
+</span>
+
+
+<span>
+
+Instrumentation & mesure
+
+</span>
+
+
+<span>
+
+Analyse d'incertitudes
+
+</span>
+
+
+</div>
+
+
+</div>
+
+
+</section>
+
+
+
+</main>
+
+
+
+<footer class="footer">
+
+
+<div class="container">
+
+
+<p>
+
+© 2026 Youenn Le Roux
+
+</p>
+
+
+</div>
+
+
+</footer>
+
+
+
+</body>
+
+
+</html>

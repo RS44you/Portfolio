@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+
+<head>
+
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<title>Réseau de neurones from scratch | Portfolio</title>
+
+
+<meta name="description"
+content="Implémentation d'un réseau de neurones en Python/NumPy, entraîné sur MNIST, par Youenn Le Roux">
+
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+rel="stylesheet">
+
+
+<link rel="stylesheet" href="../css/variables.css">
+
+<link rel="stylesheet" href="../css/style.css">
+
+<link rel="stylesheet" href="../css/project.css">
+
+<link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<!-- MathJax : rendu des formules LaTeX directement dans le HTML -->
+<script>
+MathJax = {
+    tex: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']]
+    },
+    svg: { fontCache: 'global' }
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js"></script>
+
+<!-- Styles complémentaires pour le tableau de config et les stats,
+     au cas où ces classes ne seraient pas encore définies dans project.css -->
+<style>
+.project-content table.config-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    font-size: 0.95rem;
+}
+.project-content table.config-table th,
+.project-content table.config-table td {
+    text-align: left;
+    padding: 0.65rem 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+.project-content table.config-table thead th {
+    font-weight: 600;
+    color: var(--color-primary, #d6336c);
+    border-bottom: 2px solid var(--color-primary, #d6336c);
+}
+.project-content table.config-table tbody tr:hover {
+    background: rgba(214, 51, 108, 0.05);
+}
+.stats-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin: 1.5rem 0 2rem;
+}
+.stat-card {
+    flex: 1 1 160px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1.25rem 1rem;
+    border-radius: 12px;
+    background: rgba(214, 51, 108, 0.06);
+    border: 1px solid rgba(214, 51, 108, 0.15);
+}
+.stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--color-primary, #d6336c);
+}
+.stat-label {
+    margin-top: 0.35rem;
+    font-size: 0.85rem;
+    opacity: 0.75;
+}
+/* Centrage forcé des figures (utile pour les images qui ne remplissent
+   pas toute la largeur, comme la matrice de confusion) */
+.project-content .project-figure {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+.project-content .project-figure img {
+    display: block;
+    margin: 0 auto;
+    max-width: 100%;
+    height: auto;
+}
+</style>
+
+
+</head>
+
+
+
+<body class="project-ml">
+
+
+<!-- Navigation -->
+
+
+<nav class="navbar">
+
+
+<div class="container nav-container">
+
+
+
+
+<a href="../index.html" class="back-link">
+
+<i class="fa-solid fa-arrow-left"></i> Retour
+
+</a>
+
+
+</div>
+
+
+</nav>
+
+
+
+
+
+<main>
+
+
+
+<!-- Hero projet -->
+
+
+<section class="project-hero">
+
+
+<div class="container">
+
+
+<div class="project-category">
+
+<div class="project-icon">
+
+🧠
+
+</div>
+
+<p class="section-label">
+
+Projet personnel · Machine Learning
+
+</p>
+
+</div>
+
+
+<h1>
+
+Réseau de neurones from scratch
+
+</h1>
+
+
+<p class="project-intro">
+
+Implémentation d'un réseau de neurones entièrement en Python/NumPy —
+sans framework de deep learning — entraîné à reconnaître des chiffres
+manuscrits sur le dataset MNIST, avec rétropropagation codée à la main.
+
+</p>
+
+
+
+<div class="tags">
+
+
+<span>
+
+Python,
+
+</span>
+
+
+<span>
+
+NumPy,
+
+</span>
+
+
+<span>
+
+Machine Learning,
+
+</span>
+
+
+<span>
+
+Rétropropagation
+
+</span>
+
+
+</div>
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+<!-- Image -->
+
+
+<section>
+
+
+<div class="container">
+
+
+<img src="../assets/images/projects/mnist-nn/architecture.png"
+alt="Architecture du réseau de neurones : 784 entrées, deux couches cachées de 16 neurones, 10 sorties"
+class="project-main-image">
+
+
+</div>
+
+
+</section>
+
+
+
+
+
+<!-- Contenu -->
+
+
+<section>
+
+
+<div class="container project-content">
+
+
+<h2>
+Contexte
+</h2>
+
+
+<p>
+
+Beaucoup d'outils de machine learning s'utilisent aujourd'hui comme des
+boîtes noires : quelques lignes avec Keras ou PyTorch suffisent à
+entraîner un modèle sans jamais toucher aux mathématiques sous-jacentes.
+Je voulais comprendre ce qu'il se passe réellement à l'intérieur d'un
+réseau de neurones — comment il apprend, comment l'erreur se propage
+en arrière à travers les couches, comment les poids se mettent à jour.
+
+</p>
+
+
+<p>
+
+En me basant sur la série de vidéos de
+<a href="https://www.3blue1brown.com/topics/neural-networks" target="_blank" rel="noopener">3Blue1Brown</a>
+sur les réseaux de neurones, j'ai décidé d'implémenter l'ensemble du
+pipeline — propagation avant, fonction de coût, rétropropagation,
+descente de gradient — uniquement avec NumPy, puis de l'entraîner sur
+le dataset classique MNIST (chiffres manuscrits 0-9).
+
+</p>
+
+
+<h2>
+
+Objectifs
+
+</h2>
+
+
+<p>
+
+L'objectif n'était pas la performance brute (des architectures bien
+plus efficaces existent), mais la compréhension complète de la chaîne :
+écrire soi-même chaque équation de la rétropropagation, la comparer au
+calcul par différences finies pour vérifier sa justesse, puis observer
+concrètement l'effet de l'entraînement sur les poids et les
+performances du modèle.
+
+</p>
+
+
+<h2>
+
+Conception
+
+</h2>
+
+
+<p>
+
+Un réseau de neurones est un système adaptatif qui apprend à partir de
+données grâce à des unités interconnectées (les neurones), organisées
+en couches successives — une structure qui s'inspire, très
+schématiquement, du fonctionnement du cerveau. Avant de construire le
+réseau complet, il faut donc d'abord comprendre ce qu'est un neurone
+isolé, puis comment on les assemble en couches.
+
+</p>
+
+
+<h3>
+
+Le neurone
+
+</h3>
+
+
+<p>
+
+Un neurone artificiel est simplement une fonction affine — une somme
+pondérée des entrées, plus un biais — suivie d'une fonction
+d'activation. Si un neurone reçoit en entrée trois valeurs $x_1$,
+$x_2$ et $x_3$ (toutes comprises dans $[0\,;1]$), il possède alors
+trois <strong>poids</strong> $w_1$, $w_2$, $w_3$ — un par entrée — et
+un <strong>biais</strong> $b$. On note $z$ la sortie de cette partie
+affine :
+
+</p>
+
+
+<div class="math-block">
+
+$$z = w_1x_1 + w_2x_2 + w_3x_3 + b$$
+
+</div>
+
+
+<p>
+
+Les poids représentent l'importance de chaque entrée dans la décision
+du neurone, et le biais permet de décaler le seuil d'activation. Comme
+les entrées sont dans $[0\,;1]$ (elles représentent une contribution,
+une intensité), on veut que la sortie du neurone le soit aussi. On
+compose donc $z$ par une fonction bijective de $\mathbb{R}$ vers
+$[0\,;1]$, le plus souvent la sigmoïde (j'ai retenu ce choix pour ce
+projet) ou la fonction ReLU :
+
+</p>
+
+
+<div class="math-block">
+
+$$\sigma(x) = \dfrac{1}{1 + e^{-x}} \qquad\qquad \text{ReLU}(x) = \max(0, x)$$
+
+</div>
+
+
+<p>
+
+La sortie $a$ d'un neurone — son <em>activité</em> — s'écrit donc, en
+généralisant à $N$ entrées et en notant $l$ la couche à laquelle il
+appartient et $i$ son indice dans cette couche :
+
+</p>
+
+
+<div class="math-block">
+
+$$z_i^{(l)} = \sum_{k=1}^{N} w_{i,k}^{(l)}\, a_k^{(l-1)} + b_i^{(l)}
+\qquad\qquad
+a_i^{(l)} = \sigma\!\left(z_i^{(l)}\right)$$
+
+</div>
+
+
+<p>
+
+Autrement dit, l'entrée d'un neurone est simplement l'ensemble des
+sorties (activités) des neurones de la couche précédente.
+
+</p>
+
+
+<h3>
+
+Structure en couches
+
+</h3>
+
+
+<p>
+
+Le réseau est un perceptron multicouche simple. La couche 0 est la
+donnée d'entrée : une image du dataset MNIST, aplatie en un vecteur de
+784 valeurs (28 × 28 pixels, normalisées entre 0 et 1). Viennent
+ensuite deux couches cachées de 16 neurones chacune, puis une couche
+de sortie de 10 neurones — un par chiffre possible (0 à 9) — dont on
+peut normaliser les activités pour les interpréter comme des
+probabilités.
+
+</p>
+
+
+<div class="project-figure">
+
+<img src="../assets/images/projects/mnist-nn/architecture.png"
+alt="Schéma de l'architecture du réseau : 784-16-16-10">
+
+<figcaption>
+
+Architecture retenue : 784 → 16 → 16 → 10, activation sigmoïde
+
+</figcaption>
+
+</div>
+
+
+<p>
+
+Avec cette architecture, le nombre total de paramètres appris par le
+réseau (poids et biais de toutes les couches) est de :
+
+</p>
+
+
+<div class="math-block">
+
+$$16\times(784+1) \;+\; 16\times(16+1) \;+\; 10\times(16+1) \;=\; 13\,002 \text{ parametres}$$
+
+</div>
+
+
+<p>
+
+En version matricielle — c'est celle réellement utilisée dans le code,
+NumPy étant bien plus efficace sur des opérations vectorisées que sur
+des boucles neurone par neurone — la propagation avant s'écrit, pour
+chaque couche $l$ :
+
+</p>
+
+
+<div class="math-block">
+
+$$z^{(l)} = W^{(l)} a^{(l-1)} + b^{(l)} \qquad a^{(l)} = \sigma(z^{(l)})$$
+
+</div>
+
+
+<h3>
+
+Fonction de coût
+
+</h3>
+
+
+<p>
+
+Pour évaluer la performance du réseau sur une image donnée, on compare
+son activité de sortie $a^{(L)}$ (la dernière couche $L$) à
+l'étiquette réelle. Cette dernière est encodée en <em>one-hot</em> :
+un vecteur de 10 éléments, tous nuls sauf celui correspondant au bon
+chiffre, qui vaut 1. Par exemple, pour un 8 :
+
+</p>
+
+
+<div class="math-block">
+
+$$y = (0,\; 0,\; 0,\; 0,\; 0,\; 0,\; 0,\; 0,\; 1,\; 0)^T$$
+
+</div>
+
+
+<p>
+
+L'écart entre la prédiction et cette valeur attendue est mesuré par
+l'erreur quadratique moyenne (ce n'est pas la seule fonction de coût
+possible, mais c'est la plus simple à dériver à la main) :
+
+</p>
+
+
+<div class="math-block">
+
+$$C(w, b) = \dfrac{1}{|E|}\sum_{x \in E} \left\| a^{(L)}(x) - y(x) \right\|^2$$
+
+</div>
+
+
+<p>
+
+où $E$ désigne l'ensemble des données d'entraînement. L'objectif de
+l'entraînement est de trouver les poids et biais qui minimisent cette
+fonction $C$ — un problème d'optimisation à 13 002 variables.
+
+</p>
+
+
+<h3>
+
+Rétropropagation
+
+</h3>
+
+
+<p>
+
+La partie la plus délicate est la rétropropagation : il s'agit de
+calculer, couche par couche en partant de la sortie, à quel point
+chaque poids et chaque biais sont responsables de l'erreur finale, afin
+de suivre le gradient de $C$ dans le sens qui la fait diminuer.
+
+</p>
+
+<p>
+
+On introduit pour cela la notion d'<strong>erreur locale</strong>
+$\delta_j^{(l)}$ du $j$-ème neurone de la couche $l$, définie comme la
+sensibilité du coût à une petite variation de $z_j^{(l)}$ :
+
+</p>
+
+<div class="math-block">
+
+$$\delta_j^{(l)} = \frac{\partial C_x}{\partial z_j^{(l)}}$$
+
+</div>
+
+<p>
+
+En appliquant la règle de la chaîne (dérivation composée), on obtient
+une expression pour la dernière couche, puis une relation de
+récurrence qui permet de calculer l'erreur d'une couche à partir de
+celle de la couche suivante — d'où le terme de rétro-propagation,
+puisqu'on remonte le réseau de la sortie vers l'entrée :
+
+</p>
+
+<div class="math-block">
+
+$$\delta_j^{(L)} = 2\left(a_j^{(L)} - y_j\right)\sigma'\!\left(z_j^{(L)}\right)
+\qquad\qquad
+\delta_j^{(l)} = \left(\sum_k \delta_k^{(l+1)}\, w_{kj}^{(l+1)}\right)\sigma'\!\left(z_j^{(l)}\right)$$
+
+</div>
+
+<p>
+
+Ce qui, en écriture matricielle (avec $\odot$ le produit de Hadamard,
+terme à terme), donne la forme réellement implémentée dans le code :
+
+</p>
+
+
+<div class="math-block">
+
+$$\delta^{(L)} = 2\left(a^{(L)} - y\right) \odot \sigma'(z^{(L)})
+\qquad\qquad
+\delta^{(l)} = \left(W^{(l+1)T} \delta^{(l+1)}\right) \odot \sigma'(z^{(l)})$$
+
+</div>
+
+
+<p>
+
+Une fois les erreurs locales connues, les dérivées partielles du coût
+par rapport aux poids et aux biais s'en déduisent directement (toujours
+par la règle de la chaîne) :
+
+</p>
+
+<div class="math-block">
+
+$$\frac{\partial C_x}{\partial W^{(l)}} = \delta^{(l)}\, a^{(l-1)T}
+\qquad\qquad
+\frac{\partial C_x}{\partial b^{(l)}} = \delta^{(l)}$$
+
+</div>
+
+<p>
+
+Ces gradients ne valent que pour une seule image ; pour optimiser sur
+l'ensemble du jeu de données, on les moyenne sur $E$. En pratique, la
+norme du gradient est souvent trop grande pour converger proprement
+vers un minimum — on introduit donc un taux d'apprentissage $\eta$,
+petit devant 1, qui contrôle l'amplitude de chaque mise à jour :
+
+</p>
+
+
+<div class="math-block">
+
+$$W^{(l)} \leftarrow W^{(l)} - \dfrac{\eta}{|E|}\sum_{x \in E}\dfrac{\partial C_x}{\partial W^{(l)}}
+\qquad\qquad
+b^{(l)} \leftarrow b^{(l)} - \dfrac{\eta}{|E|}\sum_{x \in E}\dfrac{\partial C_x}{\partial b^{(l)}}$$
+
+</div>
+
+<p>
+
+Il ne reste alors plus qu'à répéter cette étape — propagation avant,
+calcul du coût, rétropropagation, mise à jour des paramètres — un
+nombre suffisant de fois (les <em>epochs</em>) pour que le réseau
+converge vers une solution satisfaisante.
+
+</p>
+
+
+<h2>
+
+Réalisation
+
+</h2>
+
+
+<p>
+
+Le projet est séparé en deux scripts. Le premier,
+<code>neural_network_optimizate.py</code>, charge le dataset MNIST
+(CSV), initialise les poids et biais aléatoirement, puis entraîne le
+réseau sur plusieurs epochs en enregistrant à chaque itération la loss
+et l'accuracy. Les poids finaux sont sauvegardés au format CSV.
+
+</p>
+
+
+<div class="code-block">
+<span class="comment"># Rétropropagation, implémentée à la main couche par couche</span>
+<span class="keyword">def</span> <span class="func">backprop</span>(model, train, y):
+    delta3 = 2 * (train.a3 - y) * deriv_sigma(train.z3)
+    delta2 = (model.W3.T @ delta3) * deriv_sigma(train.z2)
+    delta1 = (model.W2.T @ delta2) * deriv_sigma(train.z1)
+
+    grad_W3 = delta3 @ train.a2.T
+    grad_W2 = delta2 @ train.a1.T
+    grad_W1 = delta1 @ train.input.T
+
+    <span class="keyword">return</span> grad_W1, delta1, grad_W2, delta2, grad_W3, delta3
+</div>
+
+
+<p>
+
+Le second script, <code>use_a_model.py</code>, recharge les poids
+entraînés et les applique à un nouveau jeu de données (le test set de
+MNIST) pour évaluer la généralisation du modèle. Il permet également
+de visualiser l'importance moyenne de chaque pixel dans la première
+couche, une façon simple de voir quelles zones de l'image le réseau
+utilise le plus pour ses prédictions.
+
+</p>
+
+
+<h2>
+
+Résultats
+
+</h2>
+
+
+<p>
+
+Le réseau a été entraîné sur les 60 000 images du jeu d'entraînement
+MNIST et évalué sur les 10 000 images du jeu de test, avec la
+configuration suivante :
+
+</p>
+
+
+<table class="config-table">
+<thead>
+<tr>
+<th>Paramètre</th>
+<th>Valeur</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Architecture</td>
+<td>784 → 16 → 16 → 10</td>
+</tr>
+<tr>
+<td>Fonction d'activation</td>
+<td>Sigmoïde</td>
+</tr>
+<tr>
+<td>Fonction de coût</td>
+<td>Erreur quadratique moyenne</td>
+</tr>
+<tr>
+<td>Learning rate (η)</td>
+<td>0.01</td>
+</tr>
+<tr>
+<td>Nombre d'epochs</td>
+<td>20</td>
+</tr>
+<tr>
+<td>Taille du dataset d'entraînement</td>
+<td>60 000</td>
+</tr>
+<tr>
+<td>Taille du dataset de test</td>
+<td>10 000</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+
+Après entraînement, le modèle atteint une <strong>accuracy de 95,77 %</strong>
+sur le jeu de test (94,70 % sur le jeu d'entraînement), pour une loss
+finale de 0,0709. Comme attendu avec une fonction de coût quadratique et
+une activation sigmoïde sur toutes les couches, l'entraînement présente
+un plateau initial caractéristique — les gradients restent très faibles
+tant que les neurones de sortie sont proches de leur zone saturée —
+suivi d'une phase d'apprentissage rapide une fois ce plateau franchi.
+
+</p>
+
+<div class="stats-row">
+
+<div class="stat-card">
+<span class="stat-value">95,77 %</span>
+<span class="stat-label">Accuracy (test)</span>
+</div>
+
+<div class="stat-card">
+<span class="stat-value">94,70 %</span>
+<span class="stat-label">Accuracy (entraînement)</span>
+</div>
+
+<div class="stat-card">
+<span class="stat-value">0,0709</span>
+<span class="stat-label">Loss finale</span>
+</div>
+
+</div>
+
+
+<div class="project-figure">
+
+<img src="../assets/images/projects/mnist-nn/loss_and accuracy_curve.png"
+alt="Courbes de loss et d'accuracy par epoch">
+
+<figcaption>
+
+Évolution de la loss et de l'accuracy au fil des 20 epochs
+
+</figcaption>
+
+</div>
+
+
+<p>
+
+Quelques exemples d'images du jeu de test, avec la prédiction du modèle
+face au label réel :
+
+</p>
+
+
+<div class="project-figure">
+
+<img src="../assets/images/projects/mnist-nn/predictions.png"
+alt="Grille d'exemples de prédictions du modèle sur le jeu de test">
+
+<figcaption>
+
+Exemples de prédictions sur le jeu de test (vert = correct, rouge = erreur)
+
+</figcaption>
+
+</div>
+
+
+<table class="config-table">
+<thead>
+<tr>
+<th>Image</th>
+<th>Prédiction</th>
+<th>Label réel</th>
+<th>Correct ?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>6</td>
+<td>5</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1</td>
+<td>7</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>3</td>
+<td>5</td>
+<td>5</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+
+
+<h2>
+
+Observations
+
+</h2>
+
+
+<p>
+
+Sur l'ensemble des tests, certains chiffres sont plus souvent confondus
+que d'autres — en particulier le 3 et le 5, dont les tracés manuscrits
+peuvent être visuellement proches. Dans l'ensemble le modèle reste très
+performant, et certaines de ses erreurs ne sont d'ailleurs pas
+évidentes non plus pour un œil humain, comme le montrent les exemples
+ci-dessus.
+
+</p>
+
+<p>
+
+Pour visualiser l'ensemble des erreurs de classification, j'ai tracé
+une matrice de confusion sur le jeu de test :
+
+</p>
+
+
+<div class="project-figure">
+
+<img src="../assets/images/projects/mnist-nn/matrice_de_confusion.png"
+alt="Matrice de confusion du modèle sur le jeu de test MNIST">
+
+<figcaption>
+
+Matrice de confusion — répartition des prédictions par rapport aux labels réels
+
+</figcaption>
+
+</div>
+
+
+<h2>
+
+Compétences acquises
+
+</h2>
+
+
+<div class="tags">
+
+
+<span>
+
+Python & NumPy,
+
+</span>
+
+
+<span>
+
+Algèbre linéaire appliquée,
+
+</span>
+
+
+<span>
+
+Calcul différentiel & rétropropagation,
+
+</span>
+
+
+<span>
+
+Visualisation de données,
+
+</span>
+
+
+<span>
+
+Structuration d'un projet ML
+
+</span>
+
+
+</div>
+
+
+</div>
+
+
+</section>
+
+
+
+</main>
+
+
+
+<footer class="footer">
+
+
+<div class="container">
+
+
+<p>
+
+© 2026 Youenn Le Roux
+
+</p>
+
+
+</div>
+
+
+</footer>
+
+
+
+</body>
+
+
+</html>

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Prénom Nom | Portfolio</title>
+    <title>Youenn Le Roux | Portfolio</title>
 
     <meta name="description"
         content="Portfolio de Prénom Nom, étudiant ingénieur en électronique et informatique.">
@@ -44,7 +44,7 @@ rel="stylesheet">
     <div class="container nav-container">
 
         <a href="#" class="logo">
-            Prénom Nom
+            Youenn Le Roux
         </a>
 
 
@@ -141,11 +141,29 @@ rel="stylesheet">
                 </a>
 
 
-                <a href="assets/cv/CV.pdf" class="btn btn-secondary">
+                <div class="cv-dropdown" id="cvDropdown">
 
-                    Télécharger mon CV
+                    <button type="button" class="btn btn-secondary cv-dropdown-toggle" id="cvDropdownToggle">
 
-                </a>
+                        Télécharger mon CV
+
+                        <i class="fa-solid fa-chevron-down"></i>
+
+                    </button>
+
+                    <div class="cv-dropdown-menu">
+
+                        <a href="assets/cv/CV-FR.pdf" download>
+                            <span class="cv-flag">🇫🇷</span> Français
+                        </a>
+
+                        <a href="assets/cv/CV-EN.pdf" download>
+                            <span class="cv-flag">🇬🇧</span> English
+                        </a>
+
+                    </div>
+
+                </div>
 
 
             </div>
@@ -664,15 +682,15 @@ informatique et technologies numériques.
 
 
     <img 
-    src="assets/images/projects/project1.jpg"
-    alt="Robot autonome">
+    src="assets/images/projects/can/hero-manip.jpg"
+    alt="Conversion analogique-numérique">
 
 
     <div class="project-overlay">
 
 
         <span>
-            Projet embarqué
+            TIPE · Électronique
         </span>
 
 
@@ -688,22 +706,22 @@ informatique et technologies numériques.
 
 
     				<span>
-        				2026
+        				2024-2025
     				</span>
 
 
 					</div>
 
                     <h3>
-                        Robot autonome
+                        Conversion Analogique-Numérique
                     </h3>
 
 
                     <p>
 
-                        Conception d'un système embarqué
-                        capable d'analyser son environnement
-                        et d'effectuer des déplacements autonomes.
+                        Étude du fonctionnement des CAN,
+                        comparaison de dispositifs réels et
+                        conception d'un CAN à rampe piloté par Arduino.
 
                     </p>
 
@@ -711,15 +729,15 @@ informatique et technologies numériques.
 
                     <div class="tags">
 
-                        <span>STM32</span>
-                        <span>C++</span>
-                        <span>Capteurs</span>
+                        <span>Électronique</span>
+                        <span>Arduino</span>
+                        <span>Instrumentation</span>
 
                     </div>
 
 
 
-                    <a href="projects/robot-autonome.html"
+                    <a href="projects/can.html"
                        class="project-link">
 
                         Voir le projet →
@@ -748,8 +766,8 @@ informatique et technologies numériques.
 
 
                     <img 
-                    src="assets/images/projects/project2.jpg"
-                    alt="Application informatique">
+                    src="assets/images/projects/mnist-nn/neural_network_project_cover.png"
+                    alt="Réseau de neurones from scratch">
 
 
                 </div>
@@ -766,15 +784,15 @@ informatique et technologies numériques.
 
 					</div>
                     <h3>
-                        Application logicielle
+                        Réseau de neurones from scratch
                     </h3>
 
 
                     <p>
 
-                        Développement d'une application
-                        permettant de résoudre une problématique
-                        technique.
+                        Implémentation d'un réseau de neurones en
+                        Python/NumPy, avec rétropropagation codée à la
+                        main, entraîné sur le dataset MNIST.
 
                     </p>
 
@@ -783,14 +801,13 @@ informatique et technologies numériques.
                     <div class="tags">
 
                         <span>Python</span>
-                        <span>API</span>
-                        <span>Git</span>
+                        <span>Machine Learning</span>
 
                     </div>
 
 
 
-                    <a href="projects/application.html"
+                    <a href="projects/mnist-nn.html"
                        class="project-link">
 
                         Voir le projet →
@@ -802,83 +819,6 @@ informatique et technologies numériques.
 
 
             </article>
-
-			<article 
-			class="project-card"
-			data-aos="fade-up"
-			data-aos-delay="300">
-
-
-				<div class="project-image">
-
-
-					<img 
-					src="assets/images/projects/project3.jpg"
-					alt="Projet">
-
-
-				</div>
-
-
-
-				<div class="project-content">
-
-
-					<div class="project-meta">
-
-						<span>
-							2026
-						</span>
-
-					</div>
-
-
-					<h3>
-
-					Nouveau projet
-
-					</h3>
-
-
-
-					<p>
-
-					Présentation rapide du projet.
-
-					</p>
-
-
-
-					<div class="tags">
-
-						<span>
-							Technologie
-						</span>
-
-						<span>
-							Outil
-						</span>
-
-					</div>
-
-
-					<a href="#"
-					class="project-link">
-
-						Voir le projet →
-
-					</a>
-
-
-
-				</div>
-
-
-			</article>
-
-
-
-
 
         </div>
 
@@ -921,7 +861,7 @@ informatique et technologies numériques.
         <div class="contact-links">
 
 
-            <a href="mailto:ton.email@example.com"
+            <a href="mailto:youleroux@gmail.com"
                class="contact-card">
 
 
@@ -935,7 +875,7 @@ informatique et technologies numériques.
                     </h3>
 
                     <p>
-                        ton.email@example.com
+                        youleroux@gmail.com
                     </p>
 
                 </div>
@@ -1021,7 +961,7 @@ informatique et technologies numériques.
 
         <p>
 
-            © 2026 Prénom Nom.
+            © 2026 Youenn Le Roux.
             Tous droits réservés.
 
         </p>
@@ -1050,6 +990,35 @@ AOS.init({
     once:true
 
 });
+
+</script>
+
+<script>
+
+// Menu déroulant du CV (FR/EN)
+(function () {
+    const dropdown = document.getElementById('cvDropdown');
+    const toggle = document.getElementById('cvDropdownToggle');
+
+    if (!dropdown || !toggle) return;
+
+    toggle.addEventListener('click', function (e) {
+        e.stopPropagation();
+        dropdown.classList.toggle('active');
+    });
+
+    document.addEventListener('click', function (e) {
+        if (!dropdown.contains(e.target)) {
+            dropdown.classList.remove('active');
+        }
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            dropdown.classList.remove('active');
+        }
+    });
+})();
 
 </script>
 </body>

@@ -43,3 +43,33 @@
     --container: 1200px;
 
 }
+
+
+/* ========================= */
+/* Couleurs des projets */
+/* ========================= */
+
+:root {
+
+    --robot-color: #2563EB;
+    --robot-light: #DBEAFE;
+
+    --iot-color: #10B981;
+    --iot-light: #D1FAE5;
+
+    --vision-color: #7C3AED;
+    --vision-light: #EDE9FE;
+
+    --fpga-color: #F59E0B;
+    --fpga-light: #FEF3C7;
+
+    --software-color: #06B6D4;
+    --software-light: #CFFAFE;
+
+    --can-color: #DC2626;
+    --can-light: #FEE2E2;
+
+    --ml-color: #DB2777;
+    --ml-light: #FCE7F3;
+
+}
