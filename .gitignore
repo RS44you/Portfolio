@@ -11,6 +11,3 @@ Thumbs.db
 # Node (si on passe à Astro plus tard)
 node_modules/
 dist/
-
-# Fichiers personnels
-assets/cv/*.pdf
