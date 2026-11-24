@@ -8,6 +8,12 @@ html{
     scroll-behavior:smooth;
 }
 
+/* Les ancres (#about, #skills…) s'arrêtent sous la barre de
+   navigation fixe (80px) au lieu de passer dessous */
+[id]{
+    scroll-margin-top:80px;
+}
+
 body{
 
     font-family:'Inter',sans-serif;
