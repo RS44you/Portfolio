@@ -414,6 +414,22 @@
     margin-top: 1.5rem;
 }
 
+.project-links .btn {
+    display: inline-flex;
+    align-items: center;
+    padding: .75rem 1.4rem;
+    border-radius: var(--radius);
+    font-weight: 600;
+    background: var(--text);
+    color: white;
+    transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.project-links .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
 .project-links .btn i {
     margin-right: .5rem;
 }

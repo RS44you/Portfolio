@@ -232,6 +232,16 @@ Rétropropagation
 </div>
 
 
+<div class="project-links">
+
+<a href="https://github.com/RS44you/Neural_Network_from_scratch"
+   class="btn" target="_blank" rel="noopener noreferrer">
+<i class="fa-brands fa-github"></i> Voir le code sur GitHub
+</a>
+
+</div>
+
+
 </div>
 
 
@@ -313,8 +323,7 @@ Objectifs
 
 L'objectif n'était pas la performance brute (des architectures bien
 plus efficaces existent), mais la compréhension complète de la chaîne :
-écrire soi-même chaque équation de la rétropropagation, la comparer au
-calcul par différences finies pour vérifier sa justesse, puis observer
+écrire soi-même chaque équation de la rétropropagation, puis observer
 concrètement l'effet de l'entraînement sur les poids et les
 performances du modèle.
 
@@ -615,29 +624,33 @@ $$\frac{\partial C_x}{\partial W^{(l)}} = \delta^{(l)}\, a^{(l-1)T}
 
 <p>
 
-Ces gradients ne valent que pour une seule image ; pour optimiser sur
-l'ensemble du jeu de données, on les moyenne sur $E$. En pratique, la
-norme du gradient est souvent trop grande pour converger proprement
-vers un minimum — on introduit donc un taux d'apprentissage $\eta$,
-petit devant 1, qui contrôle l'amplitude de chaque mise à jour :
+Ces gradients ne valent que pour une seule image. La descente de
+gradient classique les moyennerait sur tout l'ensemble $E$ avant de
+faire un seul pas, soit 60 000 propagations par mise à jour. Le code
+utilise plutôt la <strong>descente de gradient stochastique</strong> :
+les poids sont mis à jour après chaque image, en suivant le gradient
+de $C_x$. Chaque pas est plus bruité, mais il y en a 60 000 par
+epoch. Un taux d'apprentissage $\eta$, petit devant 1, contrôle
+l'amplitude de chaque mise à jour :
 
 </p>
 
 
 <div class="math-block">
 
-$$W^{(l)} \leftarrow W^{(l)} - \dfrac{\eta}{|E|}\sum_{x \in E}\dfrac{\partial C_x}{\partial W^{(l)}}
+$$W^{(l)} \leftarrow W^{(l)} - \eta\,\dfrac{\partial C_x}{\partial W^{(l)}}
 \qquad\qquad
-b^{(l)} \leftarrow b^{(l)} - \dfrac{\eta}{|E|}\sum_{x \in E}\dfrac{\partial C_x}{\partial b^{(l)}}$$
+b^{(l)} \leftarrow b^{(l)} - \eta\,\dfrac{\partial C_x}{\partial b^{(l)}}$$
 
 </div>
 
 <p>
 
-Il ne reste alors plus qu'à répéter cette étape — propagation avant,
-calcul du coût, rétropropagation, mise à jour des paramètres — un
-nombre suffisant de fois (les <em>epochs</em>) pour que le réseau
-converge vers une solution satisfaisante.
+Il ne reste alors plus qu'à enchaîner, pour chaque image du jeu
+d'entraînement, propagation avant, rétropropagation et mise à jour
+des paramètres, puis à parcourir le jeu complet plusieurs fois (les
+<em>epochs</em>) pour que le réseau converge vers une solution
+satisfaisante.
 
 </p>
 
@@ -651,38 +664,71 @@ Réalisation
 
 <p>
 
-Le projet est séparé en deux scripts. Le premier,
-<code>neural_network_optimizate.py</code>, charge le dataset MNIST
-(CSV), initialise les poids et biais aléatoirement, puis entraîne le
-réseau sur plusieurs epochs en enregistrant à chaque itération la loss
-et l'accuracy. Les poids finaux sont sauvegardés au format CSV.
+Le code est organisé en un petit module <code>neural_net</code>
+(réseau, propagation avant, rétropropagation, fonctions d'activation,
+chargement des données) et deux scripts. Le premier,
+<code>train.py</code>, charge le dataset MNIST (CSV), initialise les
+poids et biais aléatoirement (loi uniforme sur $[-0{,}1\,;0{,}1]$),
+puis entraîne le réseau sur 20 epochs en enregistrant à chaque epoch
+la loss moyenne et l'accuracy. Les poids finaux sont sauvegardés au
+format CSV.
+
+</p>
+
+
+<p>
+
+La rétropropagation tient dans la classe <code>Gradients</code>,
+traduction directe des équations matricielles ci-dessus :
 
 </p>
 
 
 <div class="code-block">
-<span class="comment"># Rétropropagation, implémentée à la main couche par couche</span>
-<span class="keyword">def</span> <span class="func">backprop</span>(model, train, y):
-    delta3 = 2 * (train.a3 - y) * deriv_sigma(train.z3)
-    delta2 = (model.W3.T @ delta3) * deriv_sigma(train.z2)
-    delta1 = (model.W2.T @ delta2) * deriv_sigma(train.z1)
+<span class="comment"># neural_net/gradients.py (annotations de type omises)</span>
+<span class="keyword">class</span> <span class="func">Gradients</span>:
+    <span class="keyword">def</span> <span class="func">__init__</span>(self, model, train, f, y):
+        <span class="comment"># f : dérivée de la fonction d'activation (deriv_sigma)</span>
+        delta3 = 2 * (train.a3 - y) * f(train.z3)
+        delta2 = (model.W3.T @ delta3) * f(train.z2)
+        delta1 = (model.W2.T @ delta2) * f(train.z1)
 
-    grad_W3 = delta3 @ train.a2.T
-    grad_W2 = delta2 @ train.a1.T
-    grad_W1 = delta1 @ train.input.T
+        self.grad_W3 = delta3 @ train.a2.T
+        self.grad_W2 = delta2 @ train.a1.T
+        self.grad_W1 = delta1 @ train.input.T
 
-    <span class="keyword">return</span> grad_W1, delta1, grad_W2, delta2, grad_W3, delta3
+        self.grad_b3 = delta3
+        self.grad_b2 = delta2
+        self.grad_b1 = delta1
 </div>
 
 
 <p>
 
-Le second script, <code>use_a_model.py</code>, recharge les poids
-entraînés et les applique à un nouveau jeu de données (le test set de
-MNIST) pour évaluer la généralisation du modèle. Il permet également
-de visualiser l'importance moyenne de chaque pixel dans la première
-couche, une façon simple de voir quelles zones de l'image le réseau
-utilise le plus pour ses prédictions.
+La boucle d'entraînement de <code>train.py</code> montre la descente
+de gradient stochastique : une mise à jour par image.
+
+</p>
+
+
+<div class="code-block">
+<span class="keyword">for</span> d <span class="keyword">in</span> data:
+    x = d[1:].reshape(784, 1) / 255   <span class="comment"># pixels normalisés entre 0 et 1</span>
+    label = int(d[0])
+    y = one_hot(label)
+
+    forward = Calculation(x, f, model)          <span class="comment"># propagation avant</span>
+    grads = Gradients(model, forward, df, y)    <span class="comment"># rétropropagation</span>
+    model.update(grads, lr)                     <span class="comment"># mise à jour des poids</span>
+</div>
+
+
+<p>
+
+Le second script, <code>test_model.py</code>, recharge les poids
+entraînés et évalue le modèle sur les 10 000 images du jeu de test,
+sans les modifier : il calcule la loss et l'accuracy, construit la
+matrice de confusion et relève les images mal classées.
 
 </p>
 
@@ -751,6 +797,18 @@ une activation sigmoïde sur toutes les couches, l'entraînement présente
 un plateau initial caractéristique — les gradients restent très faibles
 tant que les neurones de sortie sont proches de leur zone saturée —
 suivi d'une phase d'apprentissage rapide une fois ce plateau franchi.
+
+</p>
+
+
+<p>
+
+L'accuracy de test est légèrement supérieure à celle d'entraînement,
+ce qui s'explique par la façon dont chacune est mesurée. Les poids
+sont mis à jour après chaque image : l'accuracy d'entraînement est
+donc une moyenne calculée pendant la dernière epoch, avec des poids
+qui évoluent encore. L'accuracy de test, elle, est mesurée avec les
+poids finaux, une fois l'entraînement terminé.
 
 </p>
 
