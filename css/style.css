@@ -38,6 +38,10 @@ section{
 
     padding:var(--spacing-xl) 0;
 
+    /* Empêche les animations d'entrée (AOS fade-left…) de créer
+       un défilement horizontal sur mobile */
+    overflow-x:clip;
+
 }
 
 .container{

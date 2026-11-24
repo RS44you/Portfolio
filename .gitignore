@@ -5,6 +5,9 @@ Thumbs.db
 # VS Code
 .vscode/
 
+# Claude Code (configuration locale)
+.claude/
+
 # Fichiers temporaires
 *.log
 
