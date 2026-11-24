@@ -16,7 +16,12 @@
 .project-hero h1 {
 
 
-    font-size:4rem;
+    /* 4rem sur grand écran, réduit progressivement sur mobile */
+    font-size:clamp(2.2rem, 8vw, 4rem);
+
+    line-height:1.15;
+
+    overflow-wrap:break-word;
 
     margin-bottom:1.5rem;
 
@@ -270,14 +275,19 @@
 /* Tableau comparatif */
 /* ========================= */
 
+/* Conteneur qui fait défiler le tableau horizontalement
+   s'il est plus large que l'écran (mobile) */
+.table-scroll {
+    margin: 1.5rem 0;
+    overflow-x: auto;
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+}
+
 .project-table {
     width: 100%;
     border-collapse: collapse;
-    margin: 1.5rem 0;
     background: var(--surface);
-    border-radius: var(--radius);
-    overflow: hidden;
-    box-shadow: var(--shadow-sm);
 }
 
 .project-table th,
@@ -300,6 +310,13 @@
 
 .project-table tr:last-child td {
     border-bottom: none;
+}
+
+@media(max-width:700px){
+    .project-table th,
+    .project-table td {
+        padding: .7rem .8rem;
+    }
 }
 
 /* ========================= */
