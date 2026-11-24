@@ -416,8 +416,10 @@ Montage retenu : intégrateur RC + comparateur, piloté par une carte Arduino
 
 <p>
 
-L'intégrateur impose $U_{REF} = Ri$ avec $i = -C\,\dfrac{dU_{REF}}{dt}$,
-d'où, à courant d'entrée $U_p/R$ constant :
+L'entrée inverseuse de l'amplificateur étant à la masse virtuelle, la
+résistance est parcourue par un courant constant $i = U_p/R$, qui charge
+le condensateur : $i = -C\,\dfrac{dU_{REF}}{dt}$. On en déduit, en
+partant d'un condensateur déchargé :
 
 </p>
 

@@ -373,9 +373,12 @@ Les poids représentent l'importance de chaque entrée dans la décision
 du neurone, et le biais permet de décaler le seuil d'activation. Comme
 les entrées sont dans $[0\,;1]$ (elles représentent une contribution,
 une intensité), on veut que la sortie du neurone le soit aussi. On
-compose donc $z$ par une fonction bijective de $\mathbb{R}$ vers
-$[0\,;1]$, le plus souvent la sigmoïde (j'ai retenu ce choix pour ce
-projet) ou la fonction ReLU :
+compose donc $z$ par une fonction d'activation non linéaire. J'ai
+retenu la sigmoïde, strictement croissante de $\mathbb{R}$ sur
+$]0\,;1[$, qui garde ainsi chaque activité entre 0 et 1. Une autre
+fonction très répandue est ReLU : elle n'est pas bornée, mais elle
+accélère souvent l'apprentissage dans les réseaux profonds. Elles
+s'écrivent :
 
 </p>
 
@@ -457,7 +460,7 @@ réseau (poids et biais de toutes les couches) est de :
 
 <div class="math-block">
 
-$$16\times(784+1) \;+\; 16\times(16+1) \;+\; 10\times(16+1) \;=\; 13\,002 \text{ parametres}$$
+$$16\times(784+1) \;+\; 16\times(16+1) \;+\; 10\times(16+1) \;=\; 13\,002 \text{ paramètres}$$
 
 </div>
 
